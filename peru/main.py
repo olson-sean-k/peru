@@ -16,11 +16,12 @@ from .runtime import Runtime
 
 __doc__ = """\
 Usage:
-  peru sync [-fqv] [-j N]
-  peru reup [-fqv] [-j N] [--nosync] [<modules>...]
-  peru override [list | add <module> <path> | delete <module>]
-  peru copy [-fqv] [-j N] <target> [<dest>]
-  peru clean [-fv]
+  peru sync [-fqv] [-j N] [--peru-file=<path>]
+  peru reup [-fqv] [-j N] [--nosync] [--peru-file=<path>] [<modules>...]
+  peru override
+      [list | add <module> <path> | delete <module>] [--peru-file=<path>]
+  peru copy [-fqv] [-j N] [--peru-file=<path>] <target> [<dest>]
+  peru clean [-fv] [--peru-file=<path>]
   peru (help | --help | --version)
 
 Commands:
@@ -31,12 +32,13 @@ Commands:
   clean     delete imports from your project
 
 Options:
-  -f --force     recklessly overwrite files
-  -h --help      show help
-  --nosync       after reup, skip the sync
-  -j N --jobs N  max number of parallel fetches
-  -q --quiet     don't print anything
-  -v --verbose   print all the things
+  --peru-file=<path> path to peru file (defaults to 'peru.yaml')
+  -f --force         recklessly overwrite files
+  -h --help          show help
+  --nosync           after reup, skip the sync
+  -j N --jobs N      max number of parallel fetches
+  -q --quiet         don't print anything
+  -v --verbose       print all the things
 """
 
 version_file = os.path.join(compat.MODULE_ROOT, 'VERSION')
@@ -75,6 +77,9 @@ class Main:
         matching_command = find_matching_command(self.args)
         if matching_command:
             self.runtime = Runtime(self.args, env)
+            # The peru file is used to establish the project directory, so it
+            # is parsed for all commands, even those that technically do not
+            # need any data in the peru file.
             self.scope, self.imports = parse_file(self.runtime.peru_file)
             async.run_task(matching_command(self))
         else:

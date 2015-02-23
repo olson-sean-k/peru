@@ -14,8 +14,13 @@ from . import plugin
 
 class Runtime:
     def __init__(self, args, env):
-        peru_file_name = env.get('PERU_FILE_NAME',
-                                 parser.DEFAULT_PERU_FILE_NAME)
+        # Use the file name based on the first found:
+        # 1. the `--peru-file` flag
+        # 2. the `PERU_FILE_NAME` environment variable
+        # 3. default name
+        peru_file_name = (args['--peru-file'] or
+                          env.get('PERU_FILE_NAME',
+                                  parser.DEFAULT_PERU_FILE_NAME))
         self.peru_file = find_peru_file(os.getcwd(), peru_file_name)
 
         self.root = os.path.dirname(self.peru_file)
