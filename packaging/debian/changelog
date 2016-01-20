@@ -1,3 +1,9 @@
+peru (0.3.1ubuntu~vivid1) vivid; urgency=low
+
+  * https://github.com/buildinspace/peru/commit/67b14affa621faae2ac4e0ee680065ab611d56d9
+
+ -- Sean Olson <olson.sean.k@gmail.com>  Tue, 19 Jan 2016 21:40:24 -0800
+
 peru (0.2.0ubuntu~utopic1) utopic; urgency=low
 
   * https://phabricator.buildinspace.com/D205
